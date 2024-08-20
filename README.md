@@ -6,7 +6,6 @@ When the project is complete, you will be able to monitor a website to watch tra
 
 ![Final User Interface](images/ui.png)
 
-
 ## Prerequisites
 
 The following are required to complete this project:

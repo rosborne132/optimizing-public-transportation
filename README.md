@@ -232,9 +232,9 @@ Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 
 Once the server is running, you may hit `Ctrl+C` at any time to exit.
 
-## Linting
+## Formatting
 
-Run the following for local linting.
+Run the following for local formatting.
 1. `virtualenv venv`
 2. `. venv/bin/activate`
 3. `pip install -r requirements.txt`

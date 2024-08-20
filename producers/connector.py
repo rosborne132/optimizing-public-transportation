@@ -22,8 +22,6 @@ def configure_connector():
         logging.debug("connector already created skipping recreation")
         return
 
-    logger.info("connector code not completed skipping connector creation")
-
     # Send a POST request to the Kafka Connect URL to create a new connector.
     resp = requests.post(
         KAFKA_CONNECT_URL,

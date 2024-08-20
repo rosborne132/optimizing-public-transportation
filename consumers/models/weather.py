@@ -1,4 +1,5 @@
 """Contains functionality related to Weather"""
+
 import logging
 
 
@@ -19,8 +20,8 @@ class Weather:
         weather_json_data = json.loads(message.value())
 
         try:
-            self.temperature = weather_json_data['temperature']
-            self.status = weather_json_data['status']
+            self.temperature = weather_json_data["temperature"]
+            self.status = weather_json_data["status"]
         except Exception as e:
             logger.fatal(f"error processing weather data: {e}")
             pass

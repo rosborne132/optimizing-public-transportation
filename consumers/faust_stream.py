@@ -1,4 +1,5 @@
 """Defines trends calculations for stations"""
+
 import logging
 
 import faust
@@ -36,17 +37,18 @@ topic = app.topic("postgre_connect_stations", value_type=Station)
 out_topic = app.topic("stations.table", partitions=1)
 
 table = app.Table(
-   "transformed_stations_table",
-   default=TransformedStation,
-   partitions=1,
-   changelog_topic=out_topic,
+    "transformed_stations_table",
+    default=TransformedStation,
+    partitions=1,
+    changelog_topic=out_topic,
 )
+
 
 @app.agent(topic)
 async def transform(stations):
     # Refactor line determination to be more scalable and readable
-    line_colors = {'red': station.red, 'blue': station.blue, 'green': station.green}
-    line = next((color for color, active in line_colors.items() if active), '')
+    line_colors = {"red": station.red, "blue": station.blue, "green": station.green}
+    line = next((color for color, active in line_colors.items() if active), "")
 
     try:
         # Update the table with the transformed station data
@@ -54,7 +56,7 @@ async def transform(stations):
             station_id=station.station_id,
             station_name=station.station_name,
             order=station.order,
-            line=line
+            line=line,
         )
     except Exception as e:
         # Log the error or handle it as needed

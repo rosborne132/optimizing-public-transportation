@@ -1,4 +1,5 @@
 """Configures KSQL to combine station and turnstile data"""
+
 import json
 import logging
 

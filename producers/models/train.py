@@ -1,4 +1,5 @@
 """Defines CTA Train Model"""
+
 from enum import IntEnum
 import logging
 

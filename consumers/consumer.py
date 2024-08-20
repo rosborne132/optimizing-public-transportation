@@ -1,4 +1,5 @@
 """Defines core consumer functionality"""
+
 import logging
 
 import confluent_kafka
@@ -30,13 +31,13 @@ class KafkaConsumer:
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
 
-        servers = 'PLAINTEXT://localhost:9092, PLAINTEXT://localhost:9093, PLAINTEXT://localhost:9094'
+        servers = "PLAINTEXT://localhost:9092, PLAINTEXT://localhost:9093, PLAINTEXT://localhost:9094"
         self.broker_properties = {
             "bootstrap.servers": servers,
             "group.id": self.topic_name_pattern,
             "default.topic.config": {
                 "auto.offset.reset": "earliest" if self.offset_earliest else "latest"
-            }
+            },
         }
 
         if is_avro is True:
@@ -45,10 +46,7 @@ class KafkaConsumer:
         else:
             self.consumer = Consumer(self.broker_properties)
 
-        self.consumer.subscribe(
-            [self.topic_name_pattern],
-            on_assign=self.on_assign
-        )
+        self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""

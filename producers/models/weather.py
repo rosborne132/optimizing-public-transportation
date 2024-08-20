@@ -1,4 +1,5 @@
 """Methods pertaining to weather data"""
+
 from enum import IntEnum
 import json
 import logging
@@ -39,7 +40,7 @@ class Weather(Producer):
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.
-            num_replicas=1  # Number of replicas for fault tolerance. Increase to ensure data availability.
+            num_replicas=1,  # Number of replicas for fault tolerance. Increase to ensure data availability.
         )
 
         self.status = Weather.status.sunny
@@ -71,25 +72,23 @@ class Weather(Producer):
         self._set_weather(month)
 
         resp = requests.post(
-           f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
-           headers={"Content-Type": "application/vnd.kafka.json.v2+json"},
-           data=json.dumps(
-               {
+            f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
+            headers={"Content-Type": "application/vnd.kafka.json.v2+json"},
+            data=json.dumps(
+                {
                     "key_schema": json.dumps(Weather.key_schema),
                     "value_schema": json.dumps(Weather.value_schema),
                     records: [
                         {
-                            "key": {
-                                "timestamp": self.time_millis()
-                            },
+                            "key": {"timestamp": self.time_millis()},
                             "value": {
                                 "temperature": self.temp,
                                 "status": self.status.name,
-                            }
+                            },
                         }
-                    ]
-               }
-           )
+                    ],
+                }
+            ),
         )
 
         try:
@@ -98,7 +97,7 @@ class Weather(Producer):
             logger.warning(
                 "Failed to send data to kafka, temp: %s, status: %s",
                 self.temp,
-                self.status.name
+                self.status.name,
             )
 
         logger.debug(

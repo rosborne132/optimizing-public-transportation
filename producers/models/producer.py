@@ -1,4 +1,5 @@
 """Producer base-class providing common utilites and functionality"""
+
 import logging
 import time
 
@@ -39,7 +40,7 @@ class Producer:
         #   of the messages sent to the Kafka broker.
         self.broker_properties = {
             "BROKER_URL": "PLAINTEXT://localhost:9092",
-            "SCHEMA_REGISTRY_URL": "http://localhost:8081"
+            "SCHEMA_REGISTRY_URL": "http://localhost:8081",
         }
 
         # If the topic does not already exist, try to create it
@@ -62,28 +63,28 @@ class Producer:
         #    before they are sent to the Kafka broker.
         self.producer = AvroProducer(
             {
-                'bootstrap.servers': self.broker_properties["BROKER_URL"],
+                "bootstrap.servers": self.broker_properties["BROKER_URL"],
             },
-            schema_registry=avro.CachedSchemaRegistryClient({
-                'url': self.broker_properties["SCHEMA_REGISTRY_URL"]
-            }),
+            schema_registry=avro.CachedSchemaRegistryClient(
+                {"url": self.broker_properties["SCHEMA_REGISTRY_URL"]}
+            ),
             default_key_schema=key_schema,
-            default_value_schema=value_schema
+            default_value_schema=value_schema,
         )
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
 
         # Initialize the AdminClient with the broker's URL
-        client = AdminClient({
-            'bootstrap.servers': self.broker_properties['BROKER_URL']
-        })
+        client = AdminClient(
+            {"bootstrap.servers": self.broker_properties["BROKER_URL"]}
+        )
 
         # Define the new topic with its name, number of partitions, and replication factor
         topic = NewTopic(
             topic=self.topic_name,
             num_partitions=self.num_partitions,
-            replication_factor=self.num_replicas
+            replication_factor=self.num_replicas,
         )
 
         # Attempt to create the topic

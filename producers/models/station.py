@@ -1,4 +1,5 @@
 """Methods pertaining to loading and configuring CTA "L" station data."""
+
 import logging
 from pathlib import Path
 
@@ -36,7 +37,7 @@ class Station(Producer):
             key_schema=Station.key_schema,  # Avro schema for the message key ensures consistency in message format.
             value_schema=Station.value_schema,  # Avro schema for the message value ensures data integrity and structure.
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.
-            num_replicas=1  # Number of replicas for fault tolerance. Increase to ensure data availability.
+            num_replicas=1,  # Number of replicas for fault tolerance. Increase to ensure data availability.
         )
 
         self.station_id = int(station_id)
@@ -47,24 +48,21 @@ class Station(Producer):
         self.b_train = None
         self.turnstile = Turnstile(self)
 
-
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
         self.producer.produce(
             topic=self.topic_name,
             # The key for the message is based on a timestamp to ensure ensure message uniqueness and ordering.
-            key={
-                'timestamp': self.time_millis()
-            },
+            key={"timestamp": self.time_millis()},
             value={
-                'station_id': self.station_id,
-                'train_id': train.train_id,
-                'direction': direction,
-                'line': self.color.name,
-                'train_status': train.status,
-                'prev_station_id': prev_station_id,
-                'prev_direction': prev_direction
-            }
+                "station_id": self.station_id,
+                "train_id": train.train_id,
+                "direction": direction,
+                "line": self.color.name,
+                "train_status": train.status,
+                "prev_station_id": prev_station_id,
+                "prev_direction": prev_direction,
+            },
         )
 
     def __str__(self):

@@ -1,4 +1,5 @@
 """Configures a Kafka Connector for Postgres Station data"""
+
 import json
 import logging
 
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
 CONNECTOR_NAME = "stations"
+
 
 def configure_connector():
     """Starts and configures the Kafka Connect connector"""
@@ -25,28 +27,28 @@ def configure_connector():
     # Send a POST request to the Kafka Connect URL to create a new connector.
     resp = requests.post(
         KAFKA_CONNECT_URL,
-        headers={
-            "Content-Type": "application/json"
-        },
-        data=json.dumps({
-            "name": CONNECTOR_NAME,
-            "config": {
-                "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
-                "key.converter": "org.apache.kafka.connect.json.JsonConverter",
-                "key.converter.schemas.enable": "false",
-                "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-                "value.converter.schemas.enable": "false",
-                "batch.max.rows": "500",
-                "connection.url": "jdbc:postgresql://localhost:5432/cta",
-                "connection.user": "cta_admin",
-                "connection.password": "chicago",
-                "table.whitelist": "stations",
-                "mode": "incrementing",
-                "incrementing.column.name": "stop_id",
-                "topic.prefix": "postgre_connect_",
-                "poll.interval.ms": "10000",
+        headers={"Content-Type": "application/json"},
+        data=json.dumps(
+            {
+                "name": CONNECTOR_NAME,
+                "config": {
+                    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+                    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+                    "key.converter.schemas.enable": "false",
+                    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+                    "value.converter.schemas.enable": "false",
+                    "batch.max.rows": "500",
+                    "connection.url": "jdbc:postgresql://localhost:5432/cta",
+                    "connection.user": "cta_admin",
+                    "connection.password": "chicago",
+                    "table.whitelist": "stations",
+                    "mode": "incrementing",
+                    "incrementing.column.name": "stop_id",
+                    "topic.prefix": "postgre_connect_",
+                    "poll.interval.ms": "10000",
+                },
             }
-        }),
+        ),
     )
 
     try:

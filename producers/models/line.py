@@ -1,4 +1,5 @@
 """Defines functionality relating to train lines"""
+
 import collections
 from enum import IntEnum
 import logging

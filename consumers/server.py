@@ -1,4 +1,5 @@
 """Defines a Tornado Server that consumes Kafka Event data for display"""
+
 import logging
 import logging.config
 from pathlib import Path

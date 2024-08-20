@@ -1,4 +1,5 @@
 """Creates a turnstile data producer"""
+
 import logging
 from pathlib import Path
 
@@ -13,7 +14,9 @@ logger = logging.getLogger(__name__)
 
 class Turnstile(Producer):
     key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_key.json")
-    value_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_value.json")
+    value_schema = avro.load(
+        f"{Path(__file__).parents[0]}/schemas/turnstile_value.json"
+    )
 
     def __init__(self, station):
         """Create the Turnstile"""
@@ -31,10 +34,10 @@ class Turnstile(Producer):
         # Call the Producer's constructor, passing in the topic name, key schema, and value schema.
         super().__init__(
             topic_name,
-            key_schema=Turnstile.key_schema, # Avro schema for the message key ensures consistency in message format.
-            value_schema=Turnstile.value_schema, # Avro schema for the message value ensures data integrity and structure.
+            key_schema=Turnstile.key_schema,  # Avro schema for the message key ensures consistency in message format.
+            value_schema=Turnstile.value_schema,  # Avro schema for the message value ensures data integrity and structure.
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.
-            num_replicas=1  # Number of replicas for fault tolerance. Increase to ensure data availability.
+            num_replicas=1,  # Number of replicas for fault tolerance. Increase to ensure data availability.
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
@@ -52,11 +55,11 @@ class Turnstile(Producer):
                 key_schema=self.key_schema,  # The schema for the message key.
                 value_schema=self.value_schema,  # The schema for the message value.
                 key={
-                    'timestamp': self.time_millis()  # The current time in milliseconds as the message key.
+                    "timestamp": self.time_millis()  # The current time in milliseconds as the message key.
                 },
                 value={
-                    'station_id': self.station.station_id,  # The station ID for the turnstile.
-                    'station_name': self.station.name,  # The name of the station.
-                    'line': self.station.color.name  # The line color of the station.
-                }
+                    "station_id": self.station.station_id,  # The station ID for the turnstile.
+                    "station_name": self.station.name,  # The name of the station.
+                    "line": self.station.color.name,  # The line color of the station.
+                },
             )

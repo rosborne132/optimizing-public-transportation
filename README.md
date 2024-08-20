@@ -235,7 +235,15 @@ Once the server is running, you may hit `Ctrl+C` at any time to exit.
 ## Formatting
 
 Run the following for local formatting.
-1. `virtualenv venv`
+1. `virtualenv venv` (if not already activated)
 2. `. venv/bin/activate`
-3. `pip install -r requirements.txt`
+3. `pip install -r requirements.txt` (if `flake8` is not installed)
 4. `black .`
+
+## Linting
+
+Run the following to lint your project files for Pythonic best practices and common style issues.
+1. `virtualenv venv` (if not already activated)
+2. `. venv/bin/activate`
+3. `pip install -r requirements.txt` (if `flake8` is not installed)
+4. `flake8 .`

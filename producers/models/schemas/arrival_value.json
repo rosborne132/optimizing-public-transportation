@@ -34,7 +34,7 @@
             "name": "prev_direction",
             "type": [
                 "null",
-                "int"
+                "string"
             ]
         }
     ]

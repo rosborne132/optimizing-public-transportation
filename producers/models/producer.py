@@ -79,6 +79,12 @@ class Producer:
         client = AdminClient(
             {"bootstrap.servers": self.broker_properties["BROKER_URL"]}
         )
+        topic_metadata = client.list_topics(timeout=5)
+
+        # Check to see if the given topic exists
+        if self.topic_name in topic_metadata.topics:
+            logger.info(f"topic exits {self.topic_name}")
+            return
 
         # Define the new topic with its name, number of partitions, and replication factor
         topic = NewTopic(

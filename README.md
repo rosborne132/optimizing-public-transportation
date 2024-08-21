@@ -201,7 +201,7 @@ However, when you are ready to verify the end-to-end system prior to submission,
 2. `python3 -m virtualenv venv`
 3. `. venv/bin/activate`
 4. `pip install -r requirements.txt`
-5. `python simulation.py`
+5. `python3 simulation.py`
 
 Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 

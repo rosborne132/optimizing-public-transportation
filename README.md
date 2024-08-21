@@ -200,34 +200,34 @@ However, when you are ready to verify the end-to-end system prior to submission,
 1. `cd producers`
 2. `python3 -m virtualenv venv`
 3. `. venv/bin/activate`
-4. `pip install -r requirements.txt`
+4. `pip3 install -r requirements.txt`
 5. `python3 simulation.py`
 
 Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 
 #### To run the Faust Stream Processing Application:
 1. `cd consumers`
-2. `virtualenv venv`
+2. `python3 -m virtualenv venv`
 3. `. venv/bin/activate`
-4. `pip install -r requirements.txt`
+4. `pip3 install -r requirements.txt`
 5. `faust -A faust_stream worker -l info`
 
 
 #### To run the KSQL Creation Script:
 1. `cd consumers`
-2. `virtualenv venv`
+2. `python3 -m virtualenv venv`
 3. `. venv/bin/activate`
-4. `pip install -r requirements.txt`
-5. `python ksql.py`
+4. `pip3 install -r requirements.txt`
+5. `python3 ksql.py`
 
 #### To run the `consumer`:
 
 ** NOTE **: Do not run the consumer until you have reached Step 6!
 1. `cd consumers`
-2. `virtualenv venv`
+2. `python3 -m virtualenv venv`
 3. `. venv/bin/activate`
-4. `pip install -r requirements.txt`
-5. `python server.py`
+4. `pip3 install -r requirements.txt`
+5. `python3 server.py`
 
 Once the server is running, you may hit `Ctrl+C` at any time to exit.
 

@@ -33,11 +33,11 @@ class TransformedStation(faust.Record):
 # Define a Faust Stream that ingests data from the Kafka Connect stations topic and
 # places it into a new topic with only the necessary information.
 app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
-topic = app.topic("postgre_connect_stations", value_type=Station)
-out_topic = app.topic("stations.table", partitions=1)
+topic = app.topic("org.chicago.cta.stations", value_type=Station)
+out_topic = app.topic("org.chicago.cta.stations.table.v1", partitions=1)
 
 table = app.Table(
-    "transformed_stations_table",
+    "org.chicago.cta.stations.table.v1",
     default=TransformedStation,
     partitions=1,
     changelog_topic=out_topic,
@@ -46,21 +46,22 @@ table = app.Table(
 
 @app.agent(topic)
 async def transform(stations):
-    # Refactor line determination to be more scalable and readable
-    line_colors = {"red": station.red, "blue": station.blue, "green": station.green}
-    line = next((color for color, active in line_colors.items() if active), "")
+    async for station in stations:
+        # Refactor line determination to be more scalable and readable
+        line_colors = {"red": station.red, "blue": station.blue, "green": station.green}
+        line = next((color for color, active in line_colors.items() if active), "")
 
-    try:
-        # Update the table with the transformed station data
-        table[station.station_id] = TransformedStation(
-            station_id=station.station_id,
-            station_name=station.station_name,
-            order=station.order,
-            line=line,
-        )
-    except Exception as e:
-        # Log the error or handle it as needed
-        print(f"Error processing station {station.station_id}: {e}")
+        try:
+            # Update the table with the transformed station data
+            table[station.station_id] = TransformedStation(
+                station_id=station.station_id,
+                station_name=station.station_name,
+                order=station.order,
+                line=line,
+            )
+        except Exception as e:
+            # Log the error or handle it as needed
+            print(f"Error processing station {station.station_id}: {e}")
 
 
 if __name__ == "__main__":

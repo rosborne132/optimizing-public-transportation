@@ -30,10 +30,8 @@ class KafkaConsumer:
         self.sleep_secs = sleep_secs
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
-
-        servers = "PLAINTEXT://localhost:9092, PLAINTEXT://localhost:9093, PLAINTEXT://localhost:9094"
         self.broker_properties = {
-            "bootstrap.servers": servers,
+            "bootstrap.servers": "PLAINTEXT://localhost:9092",
             "group.id": self.topic_name_pattern,
             "default.topic.config": {
                 "auto.offset.reset": "earliest" if self.offset_earliest else "latest"
@@ -52,7 +50,8 @@ class KafkaConsumer:
         """Callback for when topic assignment takes place"""
 
         for partition in partitions:
-            partition.offset = OFFSET_BEGINNING
+            if self.offset_earliest is True:
+                partition.offset = OFFSET_BEGINNING
 
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
@@ -71,14 +70,14 @@ class KafkaConsumer:
             message = self.consumer.poll(timeout=self.consume_timeout)
 
             if message is None:
-                logger.debug("no message received by consumer")
+                print("no message received by consumer")
                 return 0
             elif message.error() is not None:
                 logger.error(f"error from consumer {message.error()}")
                 return 0
             else:
                 self.message_handler(message)
-                logger.debug(f"Consumed message {message.key()}: {message.value()}")
+                print(f"Consumed message {message.key()}: {message.value()}")
                 return 1
 
     def close(self):

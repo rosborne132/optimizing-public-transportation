@@ -31,12 +31,9 @@ class Weather(Producer):
     summer_months = set((6, 7, 8))
 
     def __init__(self, month):
-        # Construct the topic name dynamically based on the month.
-        topic_name = f"weather.{month}"
-
         # Call the Producer's constructor, passing in the topic name, key schema, and value schema.
         super().__init__(
-            topic_name,
+            "org.chicago.cta.weather.v1",
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.
@@ -73,7 +70,7 @@ class Weather(Producer):
 
         resp = requests.post(
             f"{Weather.rest_proxy_url}/topics/{self.topic_name}",
-            headers={"Content-Type": "application/vnd.kafka.json.v2+json"},
+            headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
             data=json.dumps(
                 {
                     "key_schema": json.dumps(Weather.key_schema),
@@ -100,7 +97,7 @@ class Weather(Producer):
                 self.status.name,
             )
 
-        logger.debug(
+        print(
             "sent weather data to kafka, temp: %s, status: %s",
             self.temp,
             self.status.name,

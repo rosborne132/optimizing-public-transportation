@@ -29,7 +29,7 @@ class Station(Producer):
         )
 
         # Construct the topic name dynamically based on the station name.
-        topic_name = f"arrival.station.{station_name}"
+        topic_name = f"org.chicago.cta.station.arrivals.{station_name}"
 
         # Call the Producer's constructor, passing in the topic name, key schema, and value schema.
         super().__init__(

@@ -28,12 +28,9 @@ class Turnstile(Producer):
             .replace("'", "")
         )
 
-        # Construct the topic name dynamically based on the station name.
-        topic_name = f"turnstile.station.{station_name}"
-
         # Call the Producer's constructor, passing in the topic name, key schema, and value schema.
         super().__init__(
-            topic_name,
+            f"org.chicago.cta.turnstile",
             key_schema=Turnstile.key_schema,  # Avro schema for the message key ensures consistency in message format.
             value_schema=Turnstile.value_schema,  # Avro schema for the message value ensures data integrity and structure.
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.

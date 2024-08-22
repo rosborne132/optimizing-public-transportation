@@ -20,7 +20,7 @@ class Turnstile(Producer):
 
     def __init__(self, station):
         """Create the Turnstile"""
-        station_name = (
+        self.station_name = (
             station.name.lower()
             .replace("/", "_and_")
             .replace(" ", "_")
@@ -30,7 +30,7 @@ class Turnstile(Producer):
 
         # Call the Producer's constructor, passing in the topic name, key schema, and value schema.
         super().__init__(
-            f"org.chicago.cta.turnstile",
+            "org.chicago.cta.turnstile",
             key_schema=Turnstile.key_schema,  # Avro schema for the message key ensures consistency in message format.
             value_schema=Turnstile.value_schema,  # Avro schema for the message value ensures data integrity and structure.
             num_partitions=1,  # Number of partitions for the Kafka topic. Adjust for scalability and performance.

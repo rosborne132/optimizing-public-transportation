@@ -5,7 +5,6 @@ import json
 import logging
 from pathlib import Path
 import random
-import urllib.parse
 
 import requests
 
@@ -90,7 +89,8 @@ class Weather(Producer):
 
         try:
             resp.raise_for_status()
-        except:
+        except requests.exceptions.HTTPError as e:
+            logger.error(e)
             logger.warning(
                 "Failed to send data to kafka, temp: %s, status: %s",
                 self.temp,

@@ -56,7 +56,8 @@ class Producer:
         #
         # 2. schema_registry: This parameter is an instance of CachedSchemaRegistryClient, initialized with the URL of the
         #    schema registry. The schema registry URL is also obtained from the `broker_properties` dictionary using the key
-        #    "SCHEMA_REGISTRY_URL". The schema registry is used to store and retrieve Avro schemas for the messages being produced.
+        #    "SCHEMA_REGISTRY_URL". The schema registry is used to store and retrieve Avro schemas for the messages being
+        #    produced.
         #
         # 3. default_key_schema and default_value_schema: These parameters specify the Avro schemas for the keys and values of
         #    the messages, respectively. These schemas are used to serialize the messages' keys and values into Avro format
@@ -106,12 +107,9 @@ class Producer:
                 raise
 
     def time_millis(self):
+        """Use this function to get the key for Kafka Events"""
         return int(round(time.time() * 1000))
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
         self.producer.flush()
-
-    def time_millis(self):
-        """Use this function to get the key for Kafka Events"""
-        return int(round(time.time() * 1000))

@@ -52,8 +52,9 @@ def configure_connector():
     try:
         resp.raise_for_status()
         logging.debug("connector created successfully")
-    except:
+    except requests.exceptions.HTTPError as e:
         logging.debug("connector creation failed")
+        logger.error(e)
         logger.error(
             "Failed to create connector: status code %s, message: %s",
             resp.status_code,
